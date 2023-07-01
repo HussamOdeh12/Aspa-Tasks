@@ -1,16 +1,18 @@
-<h1 align = "center">Aspa Tasks</h1>
+<h1 align = "center">⭐ Aspa Tasks ⭐</h1>
 
-### Setup to run Aspa Tasks project:
+### Setup to run Aspa Tasks project
 
 <h3> First Terminal: </h3>
-<h5>- cd server</h5>
-<h5>- npm i</h5>
-<h5>- npm start</h5>
+<h5>1- cd server</h5>
+<h5>2- npm i</h5>
+<h5>3- npm start</h5>
 
 <h3> Second Terminal: </h3>
-<h5>- cd client</h5>
-<h5>- npm i</h5>
-<h5>- npm start</h5>
+<h5>1- cd client</h5>
+<h5>2- npm i</h5>
+<h5>3- npm start</h5>
+
+> NOTE: if ( npm i ) didn't work, try ( npm i --force ).
 
 <hr>
 
