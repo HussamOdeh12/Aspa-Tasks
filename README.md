@@ -3,14 +3,14 @@
 ### Setup to run Aspa Tasks project:
 
 <h3> First Terminal: </h3>
-<h5>cd server</h5>
-<h5>npm i</h5>
-<h5>npm start</h5>
+<h5>- cd server</h5>
+<h5>- npm i</h5>
+<h5>- npm start</h5>
 
 <h3> Second Terminal: </h3>
-<h5>cd client</h5>
-<h5>npm i</h5>
-<h5>npm start</h5>
+<h5>- cd client</h5>
+<h5>- npm i</h5>
+<h5>- npm start</h5>
 
 <hr>
 
