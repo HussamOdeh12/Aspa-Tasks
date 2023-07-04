@@ -57,7 +57,7 @@ const CardDetails = () => {
           </Typography>
 
           <Typography className={classes.subtitle} variant="h6">
-            Created by: {card.creator}
+            Created by: {card.name}
           </Typography>
 
           <Typography variant="body2">

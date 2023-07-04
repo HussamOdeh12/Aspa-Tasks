@@ -6,8 +6,9 @@ import { deleteCard, likeCard } from "../../../actions/cards";
 import { editNotify, deleteNotify } from "../../Notify/Notify";
 import useStyles from "./styles";
 import ThumbUpRoundedIcon from "@material-ui/icons/ThumbUpRounded";
+import ThumbUpOutlinedIcon from "@material-ui/icons/ThumbUpOutlined";
 import DeleteForeverRoundedIcon from "@material-ui/icons/DeleteForeverRounded";
-import EditRoundedIcon from "@material-ui/icons/EditRounded";
+import EditOutlinedIcon from "@material-ui/icons/EditOutlined";
 import LaunchRoundedIcon from "@material-ui/icons/LaunchRounded";
 import {
   Paper,
@@ -26,17 +27,52 @@ const CreateCard = ({ card, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("profile"));
 
   //-------------------------------------------------------------------
-  //--- onClick Functions ---
+  //--- onClick and Likes Functions ---
 
-  const editCard = () => setCurrentId(card._id);
   const openCard = () => navigate(`/cards/${card._id}`);
+  const editCard = () => {
+    setCurrentId(card._id);
+    editNotify();
+  };
+
   const likeCardFunction = () => dispatch(likeCard(card._id));
   const deleteCardFunction = () => {
     dispatch(deleteCard(card._id));
-    navigate(`/cards`);
+    deleteNotify();
   };
+
+  const Likes = () => {
+    if (card?.likeCount?.length > 0) {
+      return card.likeCount.find((like) => like === user?.result?._id) ? (
+        <>
+          <ThumbUpRoundedIcon fontSize="small" />
+          &nbsp;
+          {card.likeCount.length > 2
+            ? `You and ${card.likeCount.length - 1} others`
+            : `${card.likeCount.length} like${
+                card.likeCount.length > 1 ? "s" : ""
+              }`}
+        </>
+      ) : (
+        <>
+          <ThumbUpOutlinedIcon fontSize="small" />
+          &nbsp;{card.likeCount.length}{" "}
+          {card.likeCount.length === 1 ? "Like" : "Likes"}
+        </>
+      );
+    }
+
+    return (
+      <>
+        <ThumbUpOutlinedIcon fontSize="small" />
+        &nbsp;Like
+      </>
+    );
+  };
+
   //-------------------------------------------------------------------
 
   return (
@@ -54,7 +90,7 @@ const CreateCard = ({ card, setCurrentId }) => {
 
           <div className={classes.overlay}>
             <Typography noWrap variant="body1">
-              {card.creator}
+              {card.name}
             </Typography>
             <Typography variant="body2">
               <Moment fromNow>{card.createdAt}</Moment>
@@ -62,16 +98,17 @@ const CreateCard = ({ card, setCurrentId }) => {
           </div>
 
           <div className={classes.cardButtons}>
-            <Button
-              className={classes.cardBtn}
-              size="small"
-              onClick={() => {
-                editNotify();
-                editCard();
-              }}
-            >
-              <EditRoundedIcon fontSize="small" />
-            </Button>
+            {user?.result?._id === card?.creator && (
+              <Button
+                className={classes.cardBtn}
+                size="small"
+                onClick={() => {
+                  editCard();
+                }}
+              >
+                <EditOutlinedIcon fontSize="small" />
+              </Button>
+            )}
             <button className={classes.cardBtn} size="small" onClick={openCard}>
               <LaunchRoundedIcon fontSize="small" />
             </button>
@@ -99,28 +136,28 @@ const CreateCard = ({ card, setCurrentId }) => {
               variant="contained"
               size="small"
               color="primary"
+              disabled={!user?.result}
               fullWidth
               onClick={likeCardFunction}
             >
-              <ThumbUpRoundedIcon fontSize="small" />
-              &nbsp;
-              {`Like ${card.likeCount}`}
+              <Likes />
             </Button>
 
-            <Button
-              className={classes.btnAction}
-              variant="contained"
-              size="small"
-              color="secondary"
-              fullWidth
-              onClick={() => {
-                deleteNotify();
-                deleteCardFunction();
-              }}
-            >
-              <DeleteForeverRoundedIcon fontSize="small" />
-              Delete
-            </Button>
+            {user?.result?._id === card?.creator && (
+              <Button
+                className={classes.btnAction}
+                variant="contained"
+                size="small"
+                color="secondary"
+                fullWidth
+                onClick={() => {
+                  deleteCardFunction();
+                }}
+              >
+                <DeleteForeverRoundedIcon fontSize="small" />
+                Delete
+              </Button>
+            )}
           </CardActions>
         </Card>
       </Paper>

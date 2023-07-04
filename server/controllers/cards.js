@@ -63,13 +63,11 @@ Creating a new instance of CardMessage: This creates a new document that can be 
 save() => save the document to the MongoDB. 
 */
 export const createCard = async (req, res) => {
-  const { title, message, creator, tags, selectedFile } = req.body;
+  const card = req.body;
   const newCard = new CardMessage({
-    title,
-    message,
-    selectedFile,
-    creator,
-    tags,
+    ...card,
+    creator: req.userId,
+    createdAt: new Date().toISOString(),
   });
   try {
     await newCard.save();
@@ -132,14 +130,19 @@ if (index === -1) {
 export const likeCard = async (req, res) => {
   const { id: _id } = req.params;
   try {
+    if (!req.userId) return res.json({ message: "Not Authenticated" });
     if (!mongoose.Types.ObjectId.isValid(_id))
       return res.status(404).send(`No post with id: ${_id}`);
     const card = await CardMessage.findById(_id);
-    const updatedCard = await CardMessage.findByIdAndUpdate(
-      _id,
-      { likeCount: card.likeCount + 1 },
-      { new: true }
-    );
+    const index = card.likeCount.findIndex((id) => id === String(req.userId));
+    if (index === -1) {
+      card.likeCount.push(req.userId);
+    } else {
+      card.likeCount = card.likeCount.filter((id) => id !== String(req.userId));
+    }
+    const updatedCard = await CardMessage.findByIdAndUpdate(_id, card, {
+      new: true,
+    });
     res.json(updatedCard);
   } catch (error) {
     res.json({ message: error });

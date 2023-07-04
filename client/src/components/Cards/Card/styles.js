@@ -45,7 +45,7 @@ export default makeStyles({
     flexDirection: "column",
     position: "absolute",
     top: "20px",
-    right: "0px",
+    right: "10px",
   },
 
   cardBtn: {
@@ -54,6 +54,7 @@ export default makeStyles({
     color: "white",
     background: "none",
     border: "none",
+    outline: "none",
   },
 
   tags: {

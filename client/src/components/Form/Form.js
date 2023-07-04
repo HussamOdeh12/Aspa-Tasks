@@ -28,8 +28,6 @@ const Form = ({ currentId, setCurrentId }) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const query = useQuery();
-  const page = query.get("page") || 1;
 
   const card = useSelector((state) =>
     currentId
@@ -37,9 +35,13 @@ const Form = ({ currentId, setCurrentId }) => {
       : null
   );
 
+  const query = useQuery();
+  const page = query.get("page") || 1;
+
+  const user = JSON.parse(localStorage.getItem("profile"));
+
   // Data State
   const [cardData, setCardData] = useState({
-    creator: "",
     title: "",
     message: "",
     tags: "",
@@ -48,7 +50,6 @@ const Form = ({ currentId, setCurrentId }) => {
 
   // Validation State
   const [validation, setValidation] = useState({
-    creator: false,
     title: false,
     message: false,
   });
@@ -74,37 +75,37 @@ const Form = ({ currentId, setCurrentId }) => {
   };
 
   //-------------------------------------------------------------------
-  //--- HandleSubmit and Clear ---
+  //--- HandleSubmit, Clear and if not log in functions ---
 
   // HandleSubmit Form ( post button )
   const handleSubmit = (e) => {
     e.preventDefault();
     setValidation({
-      creator: false,
       title: false,
       message: false,
     });
 
-    const { creator, title, message } = cardData;
+    const { title, message } = cardData;
 
-    const isCreatorValid =
-      isValidLength(creator, 5, 15) && isLettersAndSymbols(creator);
     const isTitleValid =
-      isValidLength(title, 10, 40) && isLettersAndSymbols(title);
+      isValidLength(title, 10, 50) && isLettersAndSymbols(title);
     const isMessageValid = isValidLength(message, 20, Infinity);
 
-    if (!isCreatorValid || !isTitleValid || !isMessageValid) {
+    if (!isTitleValid || !isMessageValid) {
       setValidation({
-        creator: !isCreatorValid,
         title: !isTitleValid,
         message: !isMessageValid,
       });
     } else {
       if (currentId) {
-        dispatch(updateCard(currentId, cardData));
+        dispatch(
+          updateCard(currentId, { ...cardData, name: user?.result?.name })
+        );
         successNotify();
       } else {
-        dispatch(createCard(cardData, navigate));
+        dispatch(
+          createCard({ ...cardData, name: user?.result?.name }, navigate)
+        );
       }
       clear();
     }
@@ -114,7 +115,6 @@ const Form = ({ currentId, setCurrentId }) => {
   const clear = () => {
     setCurrentId(null);
     setCardData({
-      creator: "",
       title: "",
       message: "",
       tags: "",
@@ -122,11 +122,22 @@ const Form = ({ currentId, setCurrentId }) => {
     });
     setValidation((prevState) => ({
       ...prevState,
-      creator: false,
       title: false,
       message: false,
     }));
   };
+
+  // if no user exist
+  if (!user?.result?.name) {
+    return (
+      <Paper className={classes.paper} elevation={6}>
+        <Typography align="center">
+          Please Sign In to publish your task card now.
+        </Typography>
+        <Paginate page={page} />
+      </Paper>
+    );
+  }
 
   //-------------------------------------------------------------------
 
@@ -151,22 +162,6 @@ const Form = ({ currentId, setCurrentId }) => {
 
         <TextField
           className={classes.textField}
-          name="creator"
-          size="small"
-          variant="standard"
-          label="Your Name"
-          fullWidth
-          required
-          value={cardData.creator}
-          error={validation.creator}
-          helperText={validation.creator ? "5 ~ 15 characters only." : ""}
-          onChange={(e) =>
-            setCardData({ ...cardData, creator: e.target.value })
-          }
-        />
-
-        <TextField
-          className={classes.textField}
           name="title"
           size="small"
           variant="standard"
@@ -175,7 +170,7 @@ const Form = ({ currentId, setCurrentId }) => {
           required
           value={cardData.title}
           error={validation.title}
-          helperText={validation.title ? "10 ~ 40 characters only." : ""}
+          helperText={validation.title ? "10~50 characters only." : ""}
           onChange={(e) => setCardData({ ...cardData, title: e.target.value })}
         />
 
@@ -245,7 +240,6 @@ const Form = ({ currentId, setCurrentId }) => {
             post
           </Button>
         </CardActions>
-
         <Paginate page={page} />
       </form>
     </Paper>

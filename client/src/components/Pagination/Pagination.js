@@ -27,6 +27,7 @@ const Paginate = ({ page }) => {
 
   return (
     <Pagination
+      className={classes.paginate}
       classes={{ ul: classes.ul }}
       count={numberOfPages}
       page={Number(page) || 1}
@@ -37,7 +38,7 @@ const Paginate = ({ page }) => {
       hidePrevButton={true}
       renderItem={(item) => (
         <Link to={`/cards?page=${item.page}`}>
-          <PaginationItem {...item} />
+          <PaginationItem className={classes.item} {...item} />
         </Link>
       )}
     />

@@ -7,9 +7,9 @@ export default makeStyles((theme) => ({
     top: "50%",
     transform: "translate(-50%, -50%)",
     borderRadius: "10px",
+    width: "65%",
     margin: "50px 0 0 0",
     padding: "5px 15px",
-    width: "65%",
     display: "flex",
     flexDirection: "row",
     justifyContent: "space-between",
@@ -19,56 +19,49 @@ export default makeStyles((theme) => ({
     backdropFilter: "blur(3px)",
     border: "2px solid rgba(219, 219, 219, 1)",
     [theme.breakpoints.down("xs")]: {
+      flexDirection: "column-reverse",
+    },
+    [theme.breakpoints.down("md")]: {
       width: "100%",
-      justifyContent: "center",
     },
   },
 
-  logo: {
+  left_nav: {
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
+  },
+
+  logo: {
     "&:hover": {
       transform: "scale(0.9)",
       transition: "0.7s",
     },
-    [theme.breakpoints.down("xs")]: {
+    [theme.breakpoints.down("sm")]: {
       display: "none",
     },
   },
 
   home_btn: {
-    marginRight: "20px",
-  },
-
-  toolbar: {
-    display: "flex",
-    justifyContent: "flex-end",
-    width: "400px",
-    [theme.breakpoints.down("sm")]: {
-      width: "auto",
-    },
+    margin: "0 20px",
   },
 
   profile: {
     display: "flex",
     justifyContent: "space-between",
-    width: "400px",
     alignItems: "center",
-    [theme.breakpoints.down("sm")]: {
-      width: "auto",
-      marginTop: 20,
-      justifyContent: "center",
-    },
+  },
+
+  avatar: {
+    backgroundColor: "#3f51b5",
+    margin: "0 20px",
   },
 
   userName: {
-    display: "flex",
-    alignItems: "center",
-    textAlign: "center",
-  },
-
-  logout: {
-    marginLeft: "20px",
+    color: "black",
+    margin: "0 20px 0 0",
+    [theme.breakpoints.down("sm")]: {
+      display: "none",
+    },
   },
 }));

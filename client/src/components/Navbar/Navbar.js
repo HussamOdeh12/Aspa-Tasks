@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { AppBar, Avatar, Button, Toolbar, Typography } from "@material-ui/core";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
+import decode from "jwt-decode";
 import logo from "../../images/logo.png";
 import useStyles from "./styles";
 
@@ -20,6 +21,10 @@ const Navbar = () => {
 
   useEffect(() => {
     const token = user?.token;
+    if (token) {
+      const decodedToken = decode(token);
+      if (decodedToken.exp * 1000 < new Date().getTime()) logout();
+    }
     setUser(JSON.parse(localStorage.getItem("profile")));
   }, [location]);
 
@@ -34,16 +39,10 @@ const Navbar = () => {
   return (
     <>
       <AppBar className={classes.navBar} position="static">
-        <Link to="/">
-          <img
-            className={classes.logo}
-            src={logo}
-            alt="No logo found"
-            height="50px"
-          />
-        </Link>
-
-        <div>
+        <div className={classes.left_nav}>
+          <Link to="/">
+            <img className={classes.logo} src={logo} alt="" height="50px" />
+          </Link>
           <Link to="/">
             <Button
               className={classes.home_btn}
@@ -60,17 +59,13 @@ const Navbar = () => {
           </Link>
         </div>
 
-        {/* <Toolbar className={classes.toolbar}>
+        <Toolbar className={classes.right_nav}>
           {user?.result ? (
             <div className={classes.profile}>
-              <Avatar
-                className={classes.purple}
-                src={user?.result.imageUrl}
-                alt={user?.result.name}
-              >
+              <Avatar className={classes.avatar}>
                 {user?.result.name.charAt(0)}
               </Avatar>
-              <Typography className={classes.userName} variant="h6">
+              <Typography className={classes.userName}>
                 {user?.result.name}
               </Typography>
               <Button
@@ -89,7 +84,7 @@ const Navbar = () => {
               </Button>
             </Link>
           )}
-        </Toolbar> */}
+        </Toolbar>
       </AppBar>
     </>
   );

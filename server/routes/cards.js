@@ -16,11 +16,11 @@ router.get("/", getCards);
 router.get("/search", getCardsBySearch);
 router.get("/:id", getCard);
 
-router.post("/", createCard);
+router.post("/", AuthMiddle, createCard);
 
-router.patch("/:id", updateCard);
-router.patch("/:id/likeCard", likeCard);
+router.patch("/:id", AuthMiddle, updateCard);
+router.patch("/:id/likeCard", AuthMiddle, likeCard);
 
-router.delete("/:id", deleteCard);
+router.delete("/:id", AuthMiddle, deleteCard);
 
 export default router;

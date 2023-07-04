@@ -1,7 +1,16 @@
 import React from "react";
 import { TextField, Grid } from "@material-ui/core";
 
-const Input = ({ name, handleChange, label, autoFocus, type, half }) => (
+const Input = ({
+  name,
+  handleChange,
+  label,
+  autoFocus,
+  type,
+  half,
+  error,
+  helperText,
+}) => (
   <Grid item xs={12} sm={half ? 6 : 12}>
     <TextField
       name={name}
@@ -12,6 +21,8 @@ const Input = ({ name, handleChange, label, autoFocus, type, half }) => (
       label={label}
       autoFocus={autoFocus}
       type={type}
+      error={error}
+      helperText={helperText}
     />
   </Grid>
 );
