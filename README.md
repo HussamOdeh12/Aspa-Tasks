@@ -1,5 +1,10 @@
 <h1 align = "center">⭐ Aspa Tasks ⭐</h1>
 
+<h3 align = "center">This application has been developed for enabling users them to seamlessly generate, modify, and remove their
+            tasks. Users are empowered to conveniently showcase their completed
+            tasks as cards within the application, thereby facilitating
+            visibility and engagement among other users.</h3>
+
 ### Setup to run Aspa Tasks project
 
 <h3> First Terminal: </h3>
